@@ -13,9 +13,11 @@ export default function App() {
 
 const switchnavigator = createSwitchNavigator({
   login: {screen: LoginScreen},
-  drawer: {screen: AppDrawerNavigator}
-},{initialRouteName: 'drawer'}
-);
+  main: {screen: AppTabNavigator},
+  //drawer: {screen: AppDrawerNavigator}
+},{
+  initialRouteName: 'main'
+});
 
 const AppContainer = createAppContainer(switchnavigator)
 
