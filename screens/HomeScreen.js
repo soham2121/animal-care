@@ -1,14 +1,31 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native'
-import ScreenHeader from '../components/Header'
+import { View, Text, StyleSheet } from 'react-native';
+import ScreenHeader from '../components/Header';
+import firebase from 'firebase';
+import db from '../config';
+import {SafeAreaProvider} from 'react-native-safe-area-context'
 
 export default class HomeScreen extends React.Component{
+    constructor(){
+        super();
+        this.state = {
+            userId: firebase.auth().currentUser.email,
+            numberofanimals: ''
+        }
+    }
+
+    componentDidMount(){
+        console.log(firebase.auth().currentUser.email)
+    }
+
     render(){
         return(
+            <SafeAreaProvider>
             <View>
                 <ScreenHeader title = "Home Screen"/>
-                <Text>Home screen</Text>
+                <Text>Home Screen</Text>
             </View>
+            </SafeAreaProvider>
         )}
     }
 
