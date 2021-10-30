@@ -8,14 +8,6 @@ import {SafeAreaProvider} from 'react-native-safe-area-context'
 export default class HomeScreen extends React.Component{
     constructor(){
         super();
-        this.state = {
-            userId: firebase.auth().currentUser.email,
-            numberofanimals: ''
-        }
-    }
-
-    componentDidMount(){
-        console.log(firebase.auth().currentUser.email)
     }
 
     render(){

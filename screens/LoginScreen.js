@@ -19,7 +19,7 @@ export default class LoginScreen extends React.Component{
     
     userLogin = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.emailId, this.state.password).then(() => {
-            this.props.navigation.navigate('main');
+            this.props.navigation.navigate('drawer');
         })
         .catch(function(error){
             var errorCode = error.code;
@@ -39,6 +39,10 @@ export default class LoginScreen extends React.Component{
                     last_name: this.state.lastName,
                     contact: this.state.contact,
                     email_id: this.state.emailId
+                });
+                db.collection('animals').add({
+                    email_id: this.state.emailId,
+                    count: 0
                 });
                 return Alert.alert("User added successfully",'',[
                     {text: 'ok', onPress: () => this.setState({

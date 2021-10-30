@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, Modal, ScrollView, KeyboardAvoidingView, Alert, TouchableOpacity, Dimensions } from 'react-native';
 import ScreenHeader from '../components/Header';
-import {SafeAreaProvider} from 'react-native-safe-area-context'
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import firebase from 'firebase';
+import db from '../config'
 
 export default class EditScreen extends React.Component{
     constructor(){
@@ -13,7 +15,51 @@ export default class EditScreen extends React.Component{
             petspecies: '',
             petage: '',
             petbirthdate: '',
+            emailId: firebase.auth().currentUser.email,
+            count: '',
+            id: '',
+            updatename: ''
         }
+    }
+
+    componentDidMount(){
+        db.collection('animals').where('email_id','==',this.state.emailId).get().then((snapshot) => {
+            snapshot.forEach((doc) => {
+                this.setState({
+                    count: doc.data().count,
+                    id: doc.id
+                })
+                console.log(this.state.count + " " + this.state.id)
+            })
+        })
+    }
+
+    addPets = async(updatename) => {
+        //two options
+        
+        //adds as a new collection
+        /*# db.collection('animals').doc(this.state.id).collection('pet'+this.state.count).add({
+            name: this.state.petname
+        })
+        db.collection('animals').doc(this.state.id).update({
+            'count': firebase.firestore.FieldValue.increment(1)
+        })
+        this.setState({
+            count: this.state.count+1
+        })
+        console.log(this.state.count)*/
+
+        //adds as a new field
+        /*#updatename = 'pet'+this.state.count
+        this.setState({
+            updatename: updatename
+        })
+        //can i use a the state update name instead of the variable name in update function
+        await db.collection('animals').doc(this.state.id).update({
+            variable name: {
+                name: this.state.petname
+            }
+        })*/
     }
 
     showModalForAdding = () => {
@@ -54,7 +100,11 @@ export default class EditScreen extends React.Component{
                             }}>
                             </TextInput>
 
-                            <TouchableOpacity style = {[styles.inputButton, {marginTop: 50}]}>
+                            <TouchableOpacity style = {[styles.inputButton, {marginTop: 50}]}
+                                onPress = {() => {
+                                    this.addPets();
+                                }}
+                            >
                                 <Text style = {{color: '#fff'}}>Add</Text>
                             </TouchableOpacity>
 
@@ -75,6 +125,7 @@ export default class EditScreen extends React.Component{
     render(){
         return(
             <SafeAreaProvider>
+            <ScrollView>
             <View style = {styles.container}>
                 <View>
                     <ScreenHeader title = "Edit Screen"/>
@@ -97,6 +148,7 @@ export default class EditScreen extends React.Component{
                     <Text style = {{color: '#fff'}}>Add</Text>
                 </TouchableOpacity>
             </View>
+            </ScrollView>
             </SafeAreaProvider>
         )}
     }
