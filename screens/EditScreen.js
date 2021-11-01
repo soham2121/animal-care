@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Modal, ScrollView, KeyboardAvoidingView, Alert, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Modal, ScrollView, KeyboardAvoidingView, Alert, TouchableOpacity } from 'react-native';
 import ScreenHeader from '../components/Header';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import firebase from 'firebase';
@@ -9,7 +9,7 @@ export default class EditScreen extends React.Component{
     constructor(){
         super();
         this.state = {
-            modalVisible: false,
+            addModalVisible: false,
             petname: '',
             petbreed: '',
             petspecies: '',
@@ -34,20 +34,29 @@ export default class EditScreen extends React.Component{
         })
     }
 
-    addPets = async(updatename) => {
+    addPets = async(/*updatename*/) => {
         //two options
         
         //adds as a new collection
-        /*# db.collection('animals').doc(this.state.id).collection('pet'+this.state.count).add({
-            name: this.state.petname
+        await db.collection('animals').doc(this.state.id).collection('pet'+this.state.count).add({
+            name: this.state.petname,
+            species: this.state.petspecies,
+            breed: this.state.petbreed,
+            age: this.state.petage
         })
-        db.collection('animals').doc(this.state.id).update({
+        await db.collection('animals').doc(this.state.id).update({
             'count': firebase.firestore.FieldValue.increment(1)
         })
         this.setState({
             count: this.state.count+1
         })
-        console.log(this.state.count)*/
+        Alert.alert("Pet Added",'',[
+            {title: 'ok', onPress: () => {
+                this.setState({
+                    "addModalVisible": false
+                })
+            }}
+        ])
 
         //adds as a new field
         /*#updatename = 'pet'+this.state.count
@@ -64,7 +73,7 @@ export default class EditScreen extends React.Component{
 
     showModalForAdding = () => {
         return(
-            <Modal animationType = 'none' visible = {this.state.modalVisible}>
+            <Modal animationType = 'none' visible = {this.state.addModalVisible}>
                 <View style = {{alignItems: 'center', paddingBottom: 50, paddingTop: 20}}>
                     <Text style = {{fontSize: 40}}>Add A Pet</Text>
                 </View>
@@ -110,7 +119,7 @@ export default class EditScreen extends React.Component{
 
                             <TouchableOpacity style = {[styles.inputButton, {marginTop: 50}]} onPress = {() => {
                                 this.setState({
-                                    modalVisible: false
+                                    addModalVisible: false
                                 })
                             }}>
                                 <Text style = {{color: '#fff'}}>Cancel</Text>
@@ -128,7 +137,7 @@ export default class EditScreen extends React.Component{
             <ScrollView>
             <View style = {styles.container}>
                 <View>
-                    <ScreenHeader title = "Edit Screen"/>
+                    <ScreenHeader title = "Edit"/>
                 </View>
 
                 <Text style = {{fontSize: 30, paddingTop: 20}}>Add or delete you pets here</Text>
@@ -138,7 +147,7 @@ export default class EditScreen extends React.Component{
                 <View style = {{paddingBottom: 50, paddingTop: 50}}></View>
                 <TouchableOpacity style = {styles.inputButton} onPress = {() => {
                     this.setState({
-                        modalVisible: true,
+                        addModalVisible: true,
                         petname: '',
                         petspecies: '',
                         petbreed: '',
