@@ -34,11 +34,8 @@ export default class EditScreen extends React.Component{
         })
     }
 
-    addPets = async(/*updatename*/) => {
-        //two options
-        
-        //adds as a new collection
-        await db.collection('animals').doc(this.state.id).collection('pet'+this.state.count).add({
+    addPets = async() => {
+        await db.collection('animals').doc(this.state.id).collection('pets').add({
             name: this.state.petname,
             species: this.state.petspecies,
             breed: this.state.petbreed,
@@ -57,18 +54,6 @@ export default class EditScreen extends React.Component{
                 })
             }}
         ])
-
-        //adds as a new field
-        /*#updatename = 'pet'+this.state.count
-        this.setState({
-            updatename: updatename
-        })
-        //can i use a the state update name instead of the variable name in update function
-        await db.collection('animals').doc(this.state.id).update({
-            variable name: {
-                name: this.state.petname
-            }
-        })*/
     }
 
     showModalForAdding = () => {

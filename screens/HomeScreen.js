@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import ScreenHeader from '../components/Header';
 import firebase from 'firebase';
 import db from '../config';
-import {SafeAreaProvider} from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ListItem } from 'react-native-elements';
 
 export default class HomeScreen extends React.Component{
     constructor(){
@@ -12,8 +13,13 @@ export default class HomeScreen extends React.Component{
             allanimals: [],
             count: '',
             id: '',
-            emailId: firebase.auth().currentUser.email
+            emailId: firebase.auth().currentUser.email,
+            data: ''
         }
+    }
+
+    componentDidMount(){
+        this.getAnimals()
     }
 
     getAnimals = async() => {
@@ -25,34 +31,63 @@ export default class HomeScreen extends React.Component{
                 })
             })
         })
-        for(var i = 0; i < this.state.count; i++){
-            await db.collection('animals').doc(this.state.id).collection('pet'+i).get().then((snapshot) => {
-                snapshot.forEach((doc) => {
-                    var name = doc.data().name;
-                    var breed = doc.data().breed;
-                    var species = doc.data().species;
-                    var age = doc.data().age;
-                    console.log(name)
-                    console.log(breed)
-                    console.log(species)
-                    console.log(age)
-                })
+
+        var dataarr = [], a = '';
+        
+        await db.collection('animals').doc(this.state.id).collection('pets').get().then((snapshot) => {
+            snapshot.forEach((doc) => {
+                a = doc.data()
+                dataarr.push(a)
             })
-        }
+        })
+        
+        this.setState({
+            data: dataarr
+        })
     }
 
+    
+    keyExtractor = (item, index) => index.toString();
+
+
+    renderItem = ({item, i}) => {
+        return(
+            <View style = {{alignItems: 'center', borderBottomWidth: 1, borderColor: '#000', paddingBottom: 10}}>
+                <View style = {{marginTop: 10, marginBottom: 10, flexDirection: 'column'}}>
+                    <Text style = {styles.flatlisttext}>Name: {item.name}</Text>
+                    <Text style = {styles.flatlisttext}>Species: {item.species}</Text>
+                    <Text style = {styles.flatlisttext}>Breed: {item.breed}</Text>
+                    <Text style = {styles.flatlisttext}>Age: {item.age}</Text>
+                </View>
+                <View>
+                    <TouchableOpacity style = {styles.renderbutton}>
+                        <Text style = {{color: '#fff', fontSize: 14}}>More Info</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+    
     render(){
         return(
             <SafeAreaProvider>
                 <View>
                     <ScreenHeader title = "Home"/>
-                    <Text>Home Screen</Text>
                 </View>
                 <View style = {{alignItems: 'center'}}>
-                    <TouchableOpacity style = {{width: 200, height: 50, backgroundColor: '#aaa'}} onPress= {() => {
+                    <Text style = {{fontSize: 20}}>Total pets: {this.state.count}</Text>
+                </View>
+                <View>
+                    <FlatList keyExtractor = {this.keyExtractor}
+                    data = {this.state.data}
+                    renderItem = {this.renderItem}>
+                    </FlatList>
+                </View>
+                <View style = {{alignItems: 'center', marginTop: 10}}>
+                    <TouchableOpacity style = {styles.renderbutton} onPress = {() => {
                         this.getAnimals()
                     }}>
-                        <Text>press me</Text>
+                        <Text style = {{color: '#fff'}}>Reload</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaProvider>
@@ -60,9 +95,19 @@ export default class HomeScreen extends React.Component{
     }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+    flatlisttext: {
+        backgroundColor: '#eee',
+        fontSize: 20,
+        paddingRight: 10,
     },
+    renderbutton: {
+        width: 150, 
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#000',
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#000'
+    }
 })
