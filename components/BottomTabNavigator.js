@@ -21,5 +21,5 @@ export const AppTabNavigator = createBottomTabNavigator({
     }
 },
 {
-    initialRouteName: "edit"
+    initialRouteName: "view"
 })
