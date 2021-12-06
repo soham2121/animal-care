@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import ScreenHeader from '../components/Header';
 import firebase from 'firebase';
 import db from '../config';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ListItem } from 'react-native-elements';
 
 export default class HomeScreen extends React.Component{
     constructor(){
@@ -19,7 +18,7 @@ export default class HomeScreen extends React.Component{
     }
 
     componentDidMount(){
-        this.getAnimals()
+        this.getAnimals();
     }
 
     getAnimals = async() => {
@@ -53,7 +52,8 @@ export default class HomeScreen extends React.Component{
     renderItem = ({item, i}) => {
         return(
             <View style = {{alignItems: 'center', borderBottomWidth: 1, borderColor: '#000', paddingBottom: 10}}>
-                <View style = {{marginTop: 10, marginBottom: 10, flexDirection: 'column'}}>
+                <View style = {{marginTop: 10, marginBottom: 10, flexDirection: 'column', backgroundColor: '#eee', 
+                borderRadius: 10, padding: 10, paddingLeft: 20}}>
                     <Text style = {styles.flatlisttext}>Name: {item.name}</Text>
                     <Text style = {styles.flatlisttext}>Species: {item.species}</Text>
                     <Text style = {styles.flatlisttext}>Breed: {item.breed}</Text>
@@ -75,28 +75,29 @@ export default class HomeScreen extends React.Component{
                     <ScreenHeader title = "Home"/>
                 </View>
                 <View style = {{alignItems: 'center'}}>
-                    <Text style = {{fontSize: 20}}>Total pets: {this.state.count}</Text>
+                    <Text style = {{fontSize: 20}}>Total pets: {this.state.count == 0 ? '0' : this.state.count}</Text>
                 </View>
-                <View>
-                    <FlatList keyExtractor = {this.keyExtractor}
-                    data = {this.state.data}
-                    renderItem = {this.renderItem}>
-                    </FlatList>
-                </View>
-                <View style = {{alignItems: 'center', marginTop: 10}}>
-                    <TouchableOpacity style = {styles.renderbutton} onPress = {() => {
-                        this.getAnimals()
-                    }}>
-                        <Text style = {{color: '#fff'}}>Reload</Text>
-                    </TouchableOpacity>
-                </View>
+                <ScrollView>
+                    <View>
+                        <FlatList keyExtractor = {this.keyExtractor}
+                        data = {this.state.data}
+                        renderItem = {this.renderItem}>
+                        </FlatList>
+                    </View>
+                    <View style = {{alignItems: 'center', marginTop: 10}}>
+                        <TouchableOpacity style = {styles.renderbutton} onPress = {() => {
+                            this.getAnimals()
+                        }}>
+                            <Text style = {{color: '#fff'}}>Reload</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
             </SafeAreaProvider>
         )}
     }
 
 const styles = StyleSheet.create({
     flatlisttext: {
-        backgroundColor: '#eee',
         fontSize: 20,
         paddingRight: 10,
     },
