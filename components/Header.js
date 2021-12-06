@@ -9,13 +9,13 @@ export default class ScreenHeader extends React.Component{
     render(){
         return(
             <Header
-                leftComponent = {<Icon name = 'bars' type = 'font-awesome' onPress = {() => {
-                    //this.props.navigation.toggleDrawer()
-                }}/>}
+                leftComponent = {<Icon name = 'bars' type = 'font-awesome' onPress = {() => 
+                    this.props.navigation.toggleDrawer()
+                }/>}
                 centerComponent = {{text: this.props.title, style: {fontSize: 20, fontWeight: 'bold'}}}
-                rightComponent = {<Icon name = 'bell' type = 'font-awesome' onPress = {() => {
-                    //this.props.navigation.navigate('notification')
-                }}/>}
+                rightComponent = {<Icon name = 'bell' type = 'font-awesome' onPress = {() =>
+                    this.props.navigation.navigate('notif')
+                }/>}
                 backgroundColor = '#eee'
             />
         )}

@@ -3,7 +3,7 @@ import { createDrawerNavigator } from "react-navigation-drawer";
 import { AppTabNavigator } from "./BottomTabNavigator";
 import SettingsScreen from "../screens/Settings";
 import NotificationScreen from "../screens/Notification";
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
 
 export const AppDrawerNavigator = createDrawerNavigator({
     home: {
@@ -26,7 +26,7 @@ export const AppDrawerNavigator = createDrawerNavigator({
             drawerLabel: "Notifications",
             drawerIcon: <Icon name = 'bell' type = 'font-awesome'/>
         },
-    }
+    },
 },{
-    initialRouteName: "home"
+    initialRouteName: 'home'
 })
